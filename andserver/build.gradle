@@ -1,0 +1,17 @@
+apply plugin: rootProject.ext.plugins.library
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.1'
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.libraryMinSdkVersion
+        targetSdkVersion rootProject.ext.android.libraryTargetSdkVersion
+    }
+}
+
+dependencies {
+    compile fileTree(includes: ['*.jar'], dir: 'libs')
+}
+
+apply from: "../maven.gradle"
