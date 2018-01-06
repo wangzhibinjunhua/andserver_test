@@ -15,15 +15,20 @@
  */
 package com.yanzhenjie.andserver.sample;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yanzhenjie.andserver.sample.interf.WApplication;
 import com.yanzhenjie.loading.dialog.LoadingDialog;
 import com.yanzhenjie.nohttp.tools.NetUtil;
 
@@ -61,6 +66,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mService = new Intent(this, CoreService.class);
         mReceiver = new ServerStatusReceiver(this);
         mReceiver.register();
+
+        test();
+    }
+
+    private void test(){
+
+        String name= WApplication.sp_ext.get("Name","Tom");
+        Log.d("wzb","name="+name);
+        WApplication.sp_ext.set("Name","123");
+        name= WApplication.sp_ext.get("Name","Tom");
+        WApplication.sp_ext.set("ame","555");
+        Log.d("wzb","name="+name);
     }
 
     @Override

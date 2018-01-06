@@ -48,7 +48,7 @@ public class CoreService extends Service {
         AndServer andServer = new AndServer.Build()
                 .port(8080)
                 .timeout(10 * 1000)
-                .registerHandler("web/login", new RequestLoginHandler())
+                .registerHandler("login", new RequestLoginHandler())
                 // .registerHandler("download", new RequestFileHandler("Your file path"))
                 .registerHandler("upload", new RequestUploadHandler())
                 .website(new AssetsWebsite(mAssetManager, "web"))

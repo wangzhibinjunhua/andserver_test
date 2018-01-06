@@ -42,16 +42,18 @@ public class RequestLoginHandler implements RequestHandler {
 
         Log.d("wzb", "Params: " + params.toString());
 
-        String userName = URLDecoder.decode(params.get("username"), "utf-8");
-        String password = URLDecoder.decode(params.get("password"), "utf-8");
+        StringEntity sstringEntity = new StringEntity("Login Succeed", "utf-8");
+        response.setEntity(sstringEntity);
+       // String userName = URLDecoder.decode(params.get("username"), "utf-8");
+       // String password = URLDecoder.decode(params.get("password"), "utf-8");
 
-
+/*
         if ("123".equals(userName) && "123".equals(password)) {
             StringEntity stringEntity = new StringEntity("Login Succeed", "utf-8");
             response.setEntity(stringEntity);
         } else {
             StringEntity stringEntity = new StringEntity("Login Failed", "utf-8");
             response.setEntity(stringEntity);
-        }
+        }*/
     }
 }
