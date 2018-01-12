@@ -15,9 +15,11 @@
  */
 package com.yanzhenjie.andserver.sample.response;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.yanzhenjie.andserver.RequestHandler;
+import com.yanzhenjie.andserver.sample.util.DateUtil;
 import com.yanzhenjie.andserver.sample.util.JsonUtil;
 import com.yanzhenjie.andserver.util.HttpRequestParser;
 
@@ -26,34 +28,41 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * <p>Login Handler.</p>
  * Created by Yan Zhenjie on 2016/6/13.
  */
-public class RequestLoginHandler implements RequestHandler {
+public class RequestGetSysInfoHandler implements RequestHandler {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
         Map<String, String> params = HttpRequestParser.parse(request);
 
         Log.d("wzb", "Params: " + params.toString());
-
-       // StringEntity sstringEntity = new StringEntity("Login Succeed", "utf-8");
-      //  response.setEntity(sstringEntity);
-        String userName = URLDecoder.decode(params.get("username"), "utf-8");
-        String password = URLDecoder.decode(params.get("password"), "utf-8");
         String rs="";
-
-        if ("admin".equals(userName) && "admin".equals(password)) {
-            rs= JsonUtil.httpApiRes("1","Login Succeed","");
-        } else {
-            rs= JsonUtil.httpApiRes("0","Login Failed","");
+        String model= Build.MODEL;
+        String hwv="1.0";
+        String swv=Build.DISPLAY;
+        String upt= DateUtil.getDifference(android.os.SystemClock.elapsedRealtime());
+        HashMap<String, Object> map=new HashMap<String, Object>();
+        map.put("code","1");
+        map.put("model",model);
+        map.put("hwv",hwv);
+        map.put("swv",swv);
+        map.put("upt",upt);
+        try {
+            rs=JsonUtil.packageJsonObject(map);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);
 
