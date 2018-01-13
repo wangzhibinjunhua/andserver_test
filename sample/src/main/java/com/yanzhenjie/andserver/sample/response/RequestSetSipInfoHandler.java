@@ -15,31 +15,29 @@
  */
 package com.yanzhenjie.andserver.sample.response;
 
-import android.os.Build;
-import android.os.PowerManager;
+import android.content.Intent;
 import android.util.Log;
 
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.sample.interf.WApplication;
-import com.yanzhenjie.andserver.sample.util.DateUtil;
 import com.yanzhenjie.andserver.sample.util.JsonUtil;
-import com.yanzhenjie.andserver.sample.util.lNetUtil;
 import com.yanzhenjie.andserver.util.HttpRequestParser;
-import com.yanzhenjie.nohttp.tools.NetUtil;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
-import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.net.URLDecoder;
 import java.util.Map;
 
-
-public class RequestGetNetStatusHandler implements RequestHandler {
+/**
+ * <p>Login Handler.</p>
+ * Created by Yan Zhenjie on 2016/6/13.
+ */
+public class RequestSetSipInfoHandler implements RequestHandler {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
@@ -47,44 +45,27 @@ public class RequestGetNetStatusHandler implements RequestHandler {
 
         Log.d("wzb", "Params: " + params.toString());
 
+       // StringEntity sstringEntity = new StringEntity("Login Succeed", "utf-8");
+      //  response.setEntity(sstringEntity);
+        String userName = URLDecoder.decode(params.get("username"), "utf-8");
+        String password = URLDecoder.decode(params.get("password"), "utf-8");
+        String displayname=URLDecoder.decode(params.get("displayname"), "utf-8");
+        String account=URLDecoder.decode(params.get("displayname"), "utf-8");
+        String enable=URLDecoder.decode(params.get("enable"), "utf-8");
+        String server=URLDecoder.decode(params.get("server"), "utf-8");
+        String port=URLDecoder.decode(params.get("port"), "utf-8");
+        Intent intent = new Intent("com.android.sip.update");
+        intent.putExtra("num","1");//1组sip 帐号 //目前单帐号固定为1
+        intent.putExtra("sip1account",account); //帐号
+        intent.putExtra("sip1password",password);//密码
+        intent.putExtra("sip1host",server); //服务器
+        intent.putExtra("sip1port",port);//端口
+        intent.putExtra("sip1protocol","TCP");//协议
+        WApplication.CONTEXT.sendBroadcast(intent);
         String rs="";
-        String code="0";
-        String type="";
-        String mac="";
-        String ip="";
-        String mask="";
-        String gate="";
-        if(NetUtil.isWifiConnected()){
-            code="1";
-            if(lNetUtil.isWifiDHCP(WApplication.CONTEXT)){
-                type="DHCP";
-            }else{
-                type="StaticIP";
-            }
-            mask=lNetUtil.getWifiMask(WApplication.CONTEXT);
-            gate=lNetUtil.getWifiGate(WApplication.CONTEXT);
 
-        }else{
-            code="1";
-            if(WApplication.sp_ext.get("eth_type","DHCP").equals("DHCP")){
-                type="DHCP";
-            }else{
-                type="StaticIP";
-                mask=WApplication.sp_ext.get("eth_mask","255.255.255.0");
-                gate=WApplication.sp_ext.get("eth_gate","192.168.0.1");
-            }
-        }
+        rs= JsonUtil.httpApiRes("1","set ok","");
 
-        mac=lNetUtil.getLocalMacAddress(WApplication.CONTEXT);
-        ip=lNetUtil.getLocalIpAddress();
-
-        HashMap<String, Object> map=new HashMap<String, Object>();
-        map.put("code",code);
-        map.put("type",type);
-        map.put("mac",mac);
-        map.put("ip",ip);
-        map.put("mask",mask);
-        map.put("gate",gate);
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);
 

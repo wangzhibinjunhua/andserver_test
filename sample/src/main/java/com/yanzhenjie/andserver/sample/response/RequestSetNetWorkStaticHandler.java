@@ -15,31 +15,29 @@
  */
 package com.yanzhenjie.andserver.sample.response;
 
-import android.os.Build;
-import android.os.PowerManager;
+import android.content.Intent;
 import android.util.Log;
 
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.sample.interf.WApplication;
-import com.yanzhenjie.andserver.sample.util.DateUtil;
 import com.yanzhenjie.andserver.sample.util.JsonUtil;
-import com.yanzhenjie.andserver.sample.util.lNetUtil;
 import com.yanzhenjie.andserver.util.HttpRequestParser;
-import com.yanzhenjie.nohttp.tools.NetUtil;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
-import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.net.URLDecoder;
 import java.util.Map;
 
-
-public class RequestGetNetStatusHandler implements RequestHandler {
+/**
+ * <p>Login Handler.</p>
+ * Created by Yan Zhenjie on 2016/6/13.
+ */
+public class RequestSetNetWorkStaticHandler implements RequestHandler {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
@@ -47,44 +45,24 @@ public class RequestGetNetStatusHandler implements RequestHandler {
 
         Log.d("wzb", "Params: " + params.toString());
 
+        String ip = URLDecoder.decode(params.get("ip"), "utf-8");
+        String mask = URLDecoder.decode(params.get("mask"), "utf-8");
+        String gate=URLDecoder.decode(params.get("gate"), "utf-8");
+        String dns1=URLDecoder.decode(params.get("dns1"), "utf-8");
+        String dns2=URLDecoder.decode(params.get("dns2"), "utf-8");
+
+        Intent intent = new Intent("com.android.custom.net_static");
+
+        intent.putExtra("ip",ip);
+        intent.putExtra("mask",mask);
+        intent.putExtra("gate",gate);
+        intent.putExtra("dns1",dns1);
+        intent.putExtra("dns2",dns2);
+        WApplication.CONTEXT.sendBroadcast(intent);
         String rs="";
-        String code="0";
-        String type="";
-        String mac="";
-        String ip="";
-        String mask="";
-        String gate="";
-        if(NetUtil.isWifiConnected()){
-            code="1";
-            if(lNetUtil.isWifiDHCP(WApplication.CONTEXT)){
-                type="DHCP";
-            }else{
-                type="StaticIP";
-            }
-            mask=lNetUtil.getWifiMask(WApplication.CONTEXT);
-            gate=lNetUtil.getWifiGate(WApplication.CONTEXT);
 
-        }else{
-            code="1";
-            if(WApplication.sp_ext.get("eth_type","DHCP").equals("DHCP")){
-                type="DHCP";
-            }else{
-                type="StaticIP";
-                mask=WApplication.sp_ext.get("eth_mask","255.255.255.0");
-                gate=WApplication.sp_ext.get("eth_gate","192.168.0.1");
-            }
-        }
+        rs= JsonUtil.httpApiRes("1","set ok","");
 
-        mac=lNetUtil.getLocalMacAddress(WApplication.CONTEXT);
-        ip=lNetUtil.getLocalIpAddress();
-
-        HashMap<String, Object> map=new HashMap<String, Object>();
-        map.put("code",code);
-        map.put("type",type);
-        map.put("mac",mac);
-        map.put("ip",ip);
-        map.put("mask",mask);
-        map.put("gate",gate);
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);
 

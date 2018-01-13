@@ -15,14 +15,10 @@
  */
 package com.yanzhenjie.andserver.sample.response;
 
-import android.os.Build;
-import android.os.PowerManager;
 import android.util.Log;
 
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.sample.interf.WApplication;
-import com.yanzhenjie.andserver.sample.util.DateUtil;
-import com.yanzhenjie.andserver.sample.util.JsonUtil;
 import com.yanzhenjie.andserver.sample.util.lNetUtil;
 import com.yanzhenjie.andserver.util.HttpRequestParser;
 import com.yanzhenjie.nohttp.tools.NetUtil;
@@ -32,14 +28,13 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class RequestGetNetStatusHandler implements RequestHandler {
+public class RequestGetSipInfoHandler implements RequestHandler {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
@@ -49,42 +44,30 @@ public class RequestGetNetStatusHandler implements RequestHandler {
 
         String rs="";
         String code="0";
-        String type="";
-        String mac="";
-        String ip="";
-        String mask="";
-        String gate="";
-        if(NetUtil.isWifiConnected()){
-            code="1";
-            if(lNetUtil.isWifiDHCP(WApplication.CONTEXT)){
-                type="DHCP";
-            }else{
-                type="StaticIP";
-            }
-            mask=lNetUtil.getWifiMask(WApplication.CONTEXT);
-            gate=lNetUtil.getWifiGate(WApplication.CONTEXT);
-
-        }else{
-            code="1";
-            if(WApplication.sp_ext.get("eth_type","DHCP").equals("DHCP")){
-                type="DHCP";
-            }else{
-                type="StaticIP";
-                mask=WApplication.sp_ext.get("eth_mask","255.255.255.0");
-                gate=WApplication.sp_ext.get("eth_gate","192.168.0.1");
-            }
-        }
-
-        mac=lNetUtil.getLocalMacAddress(WApplication.CONTEXT);
-        ip=lNetUtil.getLocalIpAddress();
-
+        String status="已注册";
+        String username="";
+        String displayname="";
+        String account="";
+        String password="";
+        String enable="0";
+        String server="";
+        String port="";
+        account=WApplication.sp_ext.get("sip1account","");
+        username=WApplication.sp_ext.get("sip1username",account);
+        displayname=WApplication.sp_ext.get("sip1displayname",account);
+        password=WApplication.sp_ext.get("sip1password","");
+        server=WApplication.sp_ext.get("sip1host","");
+        port=WApplication.sp_ext.get("sip1port","5060");
         HashMap<String, Object> map=new HashMap<String, Object>();
         map.put("code",code);
-        map.put("type",type);
-        map.put("mac",mac);
-        map.put("ip",ip);
-        map.put("mask",mask);
-        map.put("gate",gate);
+        map.put("status",status);
+        map.put("username",username);
+        map.put("displayname",displayname);
+        map.put("account",account);
+        map.put("password",password);
+        map.put("enable",enable);
+        map.put("server",server);
+        map.put("port",port);
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);
 
