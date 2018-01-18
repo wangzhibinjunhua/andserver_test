@@ -35,6 +35,7 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,6 +86,15 @@ public class RequestGetNetStatusHandler implements RequestHandler {
         map.put("ip",ip);
         map.put("mask",mask);
         map.put("gate",gate);
+        try {
+            rs=JsonUtil.packageJsonObject(map);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String callback= URLDecoder.decode(params.get("callback"), "utf-8");
+        if(callback!=null){
+            rs=callback+"("+rs+")";
+        }
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);
 

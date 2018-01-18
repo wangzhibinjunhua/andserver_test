@@ -62,6 +62,10 @@ public class RequestSetNetWorkStaticHandler implements RequestHandler {
         String rs="";
 
         rs= JsonUtil.httpApiRes("1","set ok","");
+        String callback=URLDecoder.decode(params.get("callback"), "utf-8");
+        if(callback!=null){
+            rs=callback+"("+rs+")";
+        }
 
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);

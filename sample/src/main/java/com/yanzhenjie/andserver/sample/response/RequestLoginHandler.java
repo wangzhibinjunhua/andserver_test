@@ -54,6 +54,10 @@ public class RequestLoginHandler implements RequestHandler {
         } else {
             rs= JsonUtil.httpApiRes("0","Login Failed","");
         }
+        String callback=URLDecoder.decode(params.get("callback"), "utf-8");
+        if(callback!=null){
+            rs=callback+"("+rs+")";
+        }
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);
 

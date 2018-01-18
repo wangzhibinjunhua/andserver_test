@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.sample.interf.WApplication;
+import com.yanzhenjie.andserver.sample.util.JsonUtil;
 import com.yanzhenjie.andserver.sample.util.lNetUtil;
 import com.yanzhenjie.andserver.util.HttpRequestParser;
 import com.yanzhenjie.nohttp.tools.NetUtil;
@@ -28,8 +29,10 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
+import org.json.JSONException;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +71,15 @@ public class RequestGetSipInfoHandler implements RequestHandler {
         map.put("enable",enable);
         map.put("server",server);
         map.put("port",port);
+        try {
+            rs= JsonUtil.packageJsonObject(map);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String callback= URLDecoder.decode(params.get("callback"), "utf-8");
+        if(callback!=null){
+            rs=callback+"("+rs+")";
+        }
         StringEntity stringEntity = new StringEntity(rs, "utf-8");
         response.setEntity(stringEntity);
 
