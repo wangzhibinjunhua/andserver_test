@@ -108,6 +108,15 @@ public class lNetUtil {
     }
 
 
+    public static boolean isWifiConnected(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo.State state = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        if (state == NetworkInfo.State.CONNECTED) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 像指定地址发送post请求提交数据.
      *

@@ -49,7 +49,7 @@ public class RequestLoginHandler implements RequestHandler {
         String password = URLDecoder.decode(params.get("password"), "utf-8");
         String rs="";
 
-        if ("admin".equals(userName) && "admin".equals(password)) {
+        if ("gdthag52".equals(userName) && "gdthag52".equals(password)) {
             rs= JsonUtil.httpApiRes("1","Login Succeed","");
         } else {
             rs= JsonUtil.httpApiRes("0","Login Failed","");

@@ -55,7 +55,7 @@ public class RequestGetNetStatusHandler implements RequestHandler {
         String ip="";
         String mask="";
         String gate="";
-        if(NetUtil.isWifiConnected()){
+        if(lNetUtil.isWifiConnected(WApplication.CONTEXT)){
             code="1";
             if(lNetUtil.isWifiDHCP(WApplication.CONTEXT)){
                 type="DHCP";

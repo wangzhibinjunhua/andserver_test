@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yanzhenjie.andserver.sample.interf.WApplication;
+import com.yanzhenjie.andserver.sample.util.lNetUtil;
 import com.yanzhenjie.loading.dialog.LoadingDialog;
 import com.yanzhenjie.nohttp.tools.NetUtil;
 
@@ -72,11 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void test(){
 
-        String name= WApplication.sp_ext.get("Name","Tom");
-        Log.d("wzb","name="+name);
-        WApplication.sp_ext.set("Name","123");
-        name= WApplication.sp_ext.get("Name","Tom");
-        WApplication.sp_ext.set("ame","555");
+        boolean name= lNetUtil.isWifiConnected(WApplication.CONTEXT);
         Log.d("wzb","name="+name);
     }
 

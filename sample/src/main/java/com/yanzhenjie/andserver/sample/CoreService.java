@@ -24,7 +24,13 @@ import android.util.Log;
 
 import com.yanzhenjie.andserver.AndServer;
 import com.yanzhenjie.andserver.Server;
+import com.yanzhenjie.andserver.sample.response.RequestGetNetStatusHandler;
+import com.yanzhenjie.andserver.sample.response.RequestGetSipInfoHandler;
+import com.yanzhenjie.andserver.sample.response.RequestGetSysInfoHandler;
 import com.yanzhenjie.andserver.sample.response.RequestLoginHandler;
+import com.yanzhenjie.andserver.sample.response.RequestSetNetWorkDhcpHandler;
+import com.yanzhenjie.andserver.sample.response.RequestSetNetWorkStaticHandler;
+import com.yanzhenjie.andserver.sample.response.RequestSetSipInfoHandler;
 import com.yanzhenjie.andserver.sample.response.RequestUploadHandler;
 import com.yanzhenjie.andserver.website.AssetsWebsite;
 
@@ -51,6 +57,12 @@ public class CoreService extends Service {
                 .registerHandler("login", new RequestLoginHandler())
                 // .registerHandler("download", new RequestFileHandler("Your file path"))
                 .registerHandler("upload", new RequestUploadHandler())
+                .registerHandler("getSysInfo", new RequestGetSysInfoHandler())
+                .registerHandler("getSipInfo", new RequestGetSipInfoHandler())
+                .registerHandler("getNetStatus", new RequestGetNetStatusHandler())
+                .registerHandler("setSipInfo", new RequestSetSipInfoHandler())
+                .registerHandler("setNetWorkDhcp", new RequestSetNetWorkDhcpHandler())
+                .registerHandler("setNetWorkStatic", new RequestSetNetWorkStaticHandler())
                 .website(new AssetsWebsite(mAssetManager, "web"))
                 .listener(mListener)
                 .build();
